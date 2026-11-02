@@ -4,12 +4,12 @@ import json,hashlib,zipfile,ast
 from pypdf import PdfReader
 ROB=Path(__file__).resolve().parents[1]; BASE=ROB.parent
 summary=json.loads((ROB/'results'/'summary.json').read_text(encoding='utf-8')); verification=json.loads((ROB/'results'/'verification.json').read_text(encoding='utf-8')); assert verification['passed']
-reader=PdfReader(ROB/'2026439122-范哲豪.pdf'); assert len(reader.pages)==6
+reader=PdfReader(ROB/'提交文件'/'2026439122-范哲豪.pdf'); assert len(reader.pages)==6
 readme=f'''# 本轮抗噪课程设计 独立版
 
 姓名：范哲豪　学号：2026439122
 
-正式报告为本目录 `2026439122-范哲豪.pdf`，共 6 页。前两轮的实验目录、旧模型、旧报告、日志和压缩包已经清理。本项目不依赖那些目录。
+正式报告为 `提交文件/2026439122-范哲豪.pdf`，共 6 页。前两轮的实验目录、旧模型、旧报告、日志和压缩包已经清理。本项目不依赖那些目录。
 
 ## 保留成绩
 
@@ -64,20 +64,20 @@ PyTorch：https://docs.pytorch.org/docs/2.14/
 BatchNorm：https://arxiv.org/abs/1502.03167  
 AdamW：https://arxiv.org/abs/1711.05101
 
-使用 OpenAI Codex 辅助代码、GPU 运行、核验与报告。数值来自真实实验，未复制第三方训练脚本，未编造结果。尚未上传 GitHub 或发送作业邮件。
+使用 OpenAI Codex 辅助代码、GPU 运行、核验与报告。数值来自真实实验，未复制第三方训练脚本，未编造结果。代码仓库：https://github.com/MoRan-FZH/fashion-mnist-robustness/tree/main ；未发送作业邮件。
 '''
 (ROB/'README.md').write_text(readme,encoding='utf-8')
 entry=f'''# 仅保留本轮抗噪版本
 
 项目：robustness/
-正式六页报告：robustness/2026439122-范哲豪.pdf
+正式六页报告：robustness/提交文件/2026439122-范哲豪.pdf
 
 集成准确率：干净 {summary['ensemble_clean']*100:.2f}%，固定噪声 {summary['ensemble_noisy']*100:.2f}%。
 旧实验、旧权重、旧报告和旧包已清理；复现说明见 robustness/README.md。
 '''
 (BASE/'00-最新抗噪版阅读入口.md').write_text(entry,encoding='utf-8')
 for path in (ROB/'src').glob('*.py'): ast.parse(path.read_text(encoding='utf-8-sig'))
-files=[p for p in ROB.rglob('*') if p.is_file() and 'work' not in p.relative_to(ROB).parts and '__pycache__' not in p.parts and p.name!='交付清单.json']
+files=[p for p in ROB.rglob('*') if p.is_file() and 'work' not in p.relative_to(ROB).parts and '__pycache__' not in p.parts and p.name!='交付清单.json' and p != ROB/'2026439122-范哲豪.pdf']
 items=[{'path':p.relative_to(ROB).as_posix(),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(files)]
 manifest=ROB/'交付清单.json'; manifest.write_text(json.dumps({'student_id':'2026439122','name':'范哲豪','report_pages':6,'self_contained':True,'summary':summary,'files':items},ensure_ascii=False,indent=2),encoding='utf-8'); files.append(manifest)
 archive=BASE/'2026439122-范哲豪-抗噪优化完整材料.zip'
@@ -90,3 +90,5 @@ with zipfile.ZipFile(archive) as z:
     for item in items: assert hashlib.sha256(z.read('robustness/'+item['path'])).hexdigest()==item['sha256']
 archive.with_suffix('.zip.sha256').write_text(hashlib.sha256(archive.read_bytes()).hexdigest()+'  '+archive.name+'\n',encoding='utf-8')
 print(json.dumps({'archive':str(archive),'mib':round(archive.stat().st_size/1024**2,2),'project_files':len(files),'self_contained':True,'integrity':'passed'},ensure_ascii=False,indent=2))
+
+
