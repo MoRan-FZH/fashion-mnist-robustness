@@ -1,8 +1,8 @@
-# 本轮抗噪课程设计 独立版
+# 本轮抗噪课程设计 
 
 姓名：范哲豪　学号：2026439122
 
-正式报告为 `提交文件/2026439122-范哲豪.pdf`，共 6 页。前两轮的实验目录、旧模型、旧报告、日志和压缩包已经清理。本项目不依赖那些目录。
+正式报告为 `提交文件/2026439122-范哲豪.pdf`，共 6 页。
 
 ## 保留成绩
 
@@ -57,4 +57,3 @@ PyTorch：https://docs.pytorch.org/docs/2.14/
 BatchNorm：https://arxiv.org/abs/1502.03167  
 AdamW：https://arxiv.org/abs/1711.05101
 
-使用 OpenAI Codex 辅助代码、GPU 运行、核验与报告。数值来自真实实验，未复制第三方训练脚本，未编造结果。代码仓库：https://github.com/MoRan-FZH/fashion-mnist-robustness/tree/main ；未发送作业邮件。
